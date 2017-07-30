@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>superposition-chart</title>
+  <style media="screen">
+
+    /* #canvas {
+      width: 800px;
+      height: 400px;
+    } */
+
+  </style>
+</head>
+
+<body>
+
+
+  <canvas id="canvas" width="800" height="400"></canvas>
+  <script type="text/javascript">
+    function superPosition(ele, opts) {
+      opt = opts || {
+        data: dataOrg,
+        left: 100,
+        right: 50,
+        grid: 50,
+        font: '12px monaco',
+        color: 'rgba(255,99,132,0.2)'
+      }
+      console.log(opt)
+      const length = opt.data.time.length - 1;
+      const WID = ele.width;
+      const HEI = ele.height;
+
+      const numlength = opt.data.devicelength;
+      const ctx = ele.getContext('2d');
+      const grid = opt.grid;
+      const start = opt.left;
+      const end = opt.right;
+      const interval = (WID - start - end) / length;
+
+
+      for (var num = 0; num < numlength; num++) {
+        ctx.save();
+        ctx.font = "12px monaco";
+        ctx.fillText("NO." + num, 30, 16 + num * grid);
+        // for(let i = 0; i <= length; i ++){
+        //   ctx.fillText(data.time[i] ,i * interval + start - 14 , 33+num*grid);
+        // }
+        ctx.fillRect(start, 0 + num * grid, WID - 150, 1);
+        ctx.fillRect(start, 16 + num * grid, WID - 150, 1)
+        ctx.fillStyle = opt.color
+
+        let ms = 'no' + (num + 1);
+        console.log(ms)
+        dataOrg[ms].forEach((e, i) => {
+          ctx.fillRect(start + (e - 1) * interval, 0 + num * grid, interval, 16);
+          ctx.fillRect(start + (e - 1) * interval, 0 + numlength * grid, interval, 16)
+        })
+        ctx.restore()
+      }
+
+      ctx.font = opt.font;
+      ctx.fillText("总计", 30, 16 + grid * num);
+      ctx.fillRect(start, 0 + num * grid, WID - 150, 1);
+      ctx.fillRect(start, 16 + num * grid, WID - 150, 1)
+      for (let i = 0; i <= length; i++) {
+        ctx.fillText(opt.data.time[i], i * interval + start - 14, 33 + num * grid);
+      }
+    }
+    const dataOrg = {
+      time: ['7:00', '8:00', "9:00", "10:00", "11:00", "12:00", "13:00"],
+      no1: [1, 2, 4, 6],
+      no2: [1, 2, 3, 4, 5],
+      no3: [1, 3, 6],
+      no4: [1, 4, 6],
+      no5: [1, 3, 6],
+      devicelength: 5
+    }
+
+    let opt = {
+      data: dataOrg,
+      left: 100,
+      right: 50,
+      grid: 50,
+      font: '18px monaco',
+      color: 'rgba(255,99,132,0.2)'
+    }
+    const ele = document.querySelector('#canvas');
+    superPosition(ele)
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
